@@ -1,213 +1,173 @@
-**Constantes**:
-- `ROWS = 10`
-- `COLS = 10`
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   C Piscine BSQ                                      :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: cvalim-d & fpedroso                        +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2024/10/08 17:03:05 by cvalim-d          #+#    #+#             */
+/*   Updated: 2024/10/08 17:37:23 by cvalim-d         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
 
-## Função cabe_quadrado(mapa, i, j, size)
 
-Função que verifica se um quadrado de tamanho 'size x size' pode ser colocado na posição (i, j) do mapa.
+# Largest Square Finder
 
-Parâmetros:
-- **mapa**: matriz 2D representando o mapa com '.' para espaços livres e 'o' para obstáculos.
-- **i**: linha inicial para verificar o quadrado.
-- **j**: coluna inicial para verificar o quadrado.
-- **size**: tamanho do quadrado (ex: 2 para 2x2, 3 para 3x3, etc.).
+This program finds and marks the largest square of empty spaces (represented by `.`) in a 2D map, filling it with `X`.
+
+## Constants
+
+- `ROWS` - Number of rows in the map (10).
+- `COLS` - Number of columns in the map (10).
+- `CHAR_EMPTY` - Character representing an empty space (`.`).
+- `CHAR_FULL` - Character representing a filled space (`X`).
+
+## Functions
+
+### `void find_max_square(char map[ROWS][COLS]);`
+
+Finds the largest square of empty spaces in the given map.
 
 ```c
-int cabe_quadrado(char mapa[ROWS][COLS], int i, int j, int size)
+void find_max_square(char map[ROWS][COLS])
 {
-    // Verifica se o quadrado de tamanho 'size x size' cabe dentro dos limites do mapa
-    // Por exemplo: se 'i' = 3, 'j' = 4 e 'size' = 2, verificamos se 3+2 <= 10 e 4+2 <= 10 (verdadeiro)
-    if (i + size <= ROWS && j + size <= COLS)
+    int square_size;             // Current size of the square being checked
+    int max_coord_x;            // X coordinate of the top-left corner of the largest square found
+    int max_coord_y;            // Y coordinate of the top-left corner of the largest square found
+    int biggest_size;           // Size of the largest square found
+    int found_space;            // Flag to indicate if a square was found
+
+    square_size = 1;            // Start with a square of size 1
+    max_coord_x = -1;           // Initialize coordinates to -1 (not found)
+    max_coord_y = -1;           // Initialize coordinates to -1 (not found)
+    biggest_size = 0;           // Initialize biggest size to 0
+
+    while (1)                   // Infinite loop to find larger squares
     {
-        int x = 0; // Variável para iterar sobre as linhas do quadrado
-        // Itera pelas células dentro do quadrado para verificar se todas estão livres ('.')
-        while (x < size) // Exemplo: se size = 2, x tomará os valores 0 e 1
+        found_space = 0;       // Reset flag for each size check
+        check_all_squares(map, square_size, &max_coord_x, &max_coord_y,
+            &biggest_size, &found_space); // Check for squares of current size
+
+        if (found_space)       // If a square was found
+            square_size++;     // Increase the size for the next iteration
+        else
+            break;             // Exit if no square was found
+    }
+    if (biggest_size > 0)     // If a largest square was found
+        mark_square(map, max_coord_x, max_coord_y, biggest_size); // Mark it on the map
+}
+```
+
+### `void check_all_squares(char map[ROWS][COLS], int square_size, int *max_coord_x, int *max_coord_y, int *biggest_size, int *found_space);`
+
+Checks all possible coordinates to find a square of a given size.
+
+```c
+void check_all_squares(char map[ROWS][COLS], int square_size,
+    int *max_coord_x, int *max_coord_y, int *biggest_size, int *found_space)
+{
+    int coord_x;              // Current X coordinate being checked
+    int coord_y;              // Current Y coordinate being checked
+
+    coord_x = 0;              // Start checking from the top-left corner
+    while (coord_x <= ROWS - square_size) // Ensure square fits vertically
+    {
+        coord_y = 0;          // Reset Y coordinate for each new X coordinate
+        while (coord_y <= COLS - square_size) // Ensure square fits horizontally
         {
-            int y = 0; // Variável para iterar sobre as colunas do quadrado
-            while (y < size) // Exemplo: se size = 2, y tomará os valores 0 e 1
+            if (check_fit_square(map, coord_x, coord_y, square_size)) // Check if square fits
             {
-                // Se qualquer célula dentro do quadrado contiver algo diferente de '.', retorna 0 (não cabe)
-                // Por exemplo, se mapa[3][4] == 'o', retornará 0
-                if (mapa[i + x][j + y] != '.')
-                {
-                    return 0; // Não cabe, pois encontrou um obstáculo
-                }
-                y++; // Incrementa a coluna
+                *found_space = 1;             // Mark that a square was found
+                *biggest_size = square_size;  // Update the size of the biggest square found
+                *max_coord_x = coord_x;       // Update the X coordinate
+                *max_coord_y = coord_y;       // Update the Y coordinate
+                break;                         // Exit the inner loop
             }
-            x++; // Incrementa a linha
+            coord_y++;                        // Move to the next Y coordinate
         }
-        return 1; // Retorna 1 se todas as células estiverem livres
-    }
-    return 0; // Retorna 0 se o quadrado ultrapassar os limites do mapa
-}
-```
-
-## Função marcar_quadrado(mapa, i, j, size)
-
-Função que marca um quadrado de tamanho 'size x size' com 'X' na posição (i, j) do mapa.
-
-Parâmetros:
-- **mapa**: matriz 2D representando o mapa com '.' para espaços livres e 'o' para obstáculos.
-- **i**: linha inicial para verificar o quadrado.
-- **j**: coluna inicial para verificar o quadrado.
-- **size**: tamanho do quadrado (ex: 2 para 2x2, 3 para 3x3, etc.).
-
-```c
-void marcar_quadrado(char mapa[ROWS][COLS], int i, int j, int size)
-{
-    int x = 0; // Variável para iterar sobre as linhas do quadrado
-    // Itera pelas células dentro do quadrado e marca com 'X'
-    while (x < size) // Exemplo: se size = 2, x tomará os valores 0 e 1
-    {
-        int y = 0; // Variável para iterar sobre as colunas do quadrado
-        while (y < size) // Exemplo: se size = 2, y tomará os valores 0 e 1
-        {
-            mapa[i + x][j + y] = 'X'; // Marca a célula (i+x, j+y) como 'X'
-            y++; // Incrementa a coluna
-        }
-        x++; // Incrementa a linha
+        coord_x++;                            // Move to the next X coordinate
     }
 }
 ```
 
+### `int check_fit_square(char map[ROWS][COLS], int coord_x, int coord_y, int square_size);`
 
-## Função procurar_maior_quadrado(mapa)
-
-Função que procura o maior quadrado de tamanho size x size que pode ser colocado no mapa.
-
-Parâmetros:
-- **mapa**: matriz 2D representando o mapa com '.' para espaços livres e 'o' para obstáculos.
+Checks if a square of a specified size fits at the given coordinates.
 
 ```c
-void procurar_maior_quadrado(char mapa[ROWS][COLS])
+int check_fit_square(char map[ROWS][COLS], int coord_x, int coord_y,
+    int square_size)
 {
-    int size;       // Tamanho atual do quadrado sendo testado
-    int max_size;   // Maior tamanho de quadrado encontrado
-    int max_i;      // Linha inicial do maior quadrado encontrado
-    int max_j;      // Coluna inicial do maior quadrado encontrado
-    int encontrado; // Flag para verificar se foi encontrado um quadrado do tamanho atual
-    int i, j;
+    int i;                          // Loop counter for rows
+    int j;                          // Loop counter for columns
 
-    // Inicializa variáveis
-    size = 1;       // Começa procurando quadrados de tamanho 1x1
-    max_size = 0;   // Inicializa o tamanho máximo como 0 (nenhum quadrado encontrado ainda)
-    max_i = -1;     // Inicializa a linha máxima como -1 (não encontrada)
-    max_j = -1;     // Inicializa a coluna máxima como -1 (não encontrada)
-
-    while (1) // Inicia um loop infinito que será interrompido quando não houver mais quadrados
+    if (coord_x + square_size <= ROWS && coord_y + square_size <= COLS) // Check bounds
     {
-        encontrado = 0; // Reseta a flag de encontrado a cada nova iteração
-        i = 0; // Reinicia 'i' para percorrer as linhas do mapa
-        // Percorre todas as linhas possíveis para o quadrado atual
-        while (i <= ROWS - size) // Exemplo: se size = 2, vai até 8 (10-2)
+        i = 0;
+        while (i < square_size) // Iterate over rows of the square
         {
-            j = 0; // Reinicia 'j' para percorrer as colunas do mapa
-            // Percorre todas as colunas possíveis para o quadrado atual
-            while (j <= COLS - size) // Exemplo: se size = 2, vai até 8 (10-2)
+            j = 0;
+            while (j < square_size) // Iterate over columns of the square
             {
-                // Chama a função cabe_quadrado para verificar se o quadrado pode ser colocado
-                if (cabe_quadrado(mapa, i, j, size)) // Exemplo: se i = 3, j = 4 e size = 2
+                if (map[coord_x + i][coord_y + j] != CHAR_EMPTY) // Check if cell is empty
                 {
-                    // Verifica se é a primeira vez que encontramos um quadrado
-                    if (!encontrado) // Se ainda não encontramos um quadrado
-                    {
-                        max_size = size; // Guarda o tamanho do quadrado encontrado
-                        max_i = i;       // Guarda a linha inicial
-                        max_j = j;       // Guarda a coluna inicial
-                        encontrado = 1;  // Marca que um quadrado foi encontrado
-                    }
-                    else
-                    {
-                        // Se já encontramos um quadrado, apenas verificamos se é maior ou mais próximo
-                        // Se o tamanho do novo quadrado é maior ou se é do mesmo tamanho mas em uma posição mais próxima
-                        if (size > max_size || (size == max_size && (i < max_i || (i == max_i && j < max_j))))
-                        {
-                            max_size = size; // Atualiza o tamanho do maior quadrado encontrado
-                            max_i = i;       // Atualiza a linha inicial do maior quadrado
-                            max_j = j;       // Atualiza a coluna inicial do maior quadrado
-                        }
-                    }
+                    return (0); // Square does not fit
                 }
-                j++; // Incrementa a coluna
+                j++; // Move to the next column
             }
-            i++; // Incrementa a linha
+            i++; // Move to the next row
         }
-        // Se não encontrar um quadrado desse tamanho, sair do loop
-        if (!encontrado) // Se não encontramos nenhum quadrado na iteração atual
-        {
-            break; // Sai do loop
-        }
-        size++; // Incrementa o tamanho do quadrado a ser testado
+        return (1); // Square fits
     }
+    return (0); // Square does not fit due to bounds
+}
+```
 
-    // Verifica se algum quadrado foi encontrado
-    if (max_size > 0) // Se encontramos um quadrado maior que 0
+### `void mark_square(char map[ROWS][COLS], int coord_x, int coord_y, int square_size);`
+
+Marks a square on the map by changing empty characters to full characters.
+
+```void mark_square(char map[ROWS][COLS], int coord_x, int coord_y,
+    int square_size)
+{
+    int i;                          // Loop counter for rows
+    int j;                          // Loop counter for columns
+
+    i = 0;
+    while (i < square_size) // Iterate over rows of the square
     {
-        // Imprime o tamanho e a posição do maior quadrado encontrado
-        printf("Maior quadrado encontrado é %dx%d na posição (%d, %d)\n",
-               max_size, max_size, max_i, max_j);
-        // Marca o maior quadrado encontrado no mapa
-        marcar_quadrado(mapa, max_i, max_j, max_size);
-    }
-    else
-    {
-        // Se não encontrou nenhum quadrado, imprime mensagem
-        printf("Não há espaço para nenhum quadrado no mapa.\n");
+        j = 0;
+        while (j < square_size) // Iterate over columns of the square
+        {
+            map[coord_x + i][coord_y + j] = CHAR_FULL; // Mark the cell as full
+            j++; // Move to the next column
+        }
+        i++; // Move to the next row
     }
 }
 ```
 
-## Função imprimir_mapa(mapa)
+### `void print_map(char mapa[ROWS][COLS]);`
 
-Função que imprime o estado atual do mapa no console, mostrando as células como caracteres.
-
-Parâmetros:
-- **mapa**: matriz 2D representando o mapa com '.' para espaços livres e 'o' para obstáculos.
+Prints the current state of the map.
 
 ```c
-void imprimir_mapa(char mapa[ROWS][COLS])
+void print_map(char mapa[ROWS][COLS])
 {
-    int i = 0; // Variável para iterar sobre as linhas do mapa
-    // Percorre todas as linhas do mapa
-    while (i < ROWS)
+    int i;                          // Loop counter for rows
+    int j;                          // Loop counter for columns
+
+    i = 0;
+    while (i < ROWS) // Iterate over each row
     {
-        int j = 0; // Variável para iterar sobre as colunas do mapa
-        // Percorre todas as colunas do mapa para imprimir cada célula
-        while (j < COLS)
+        j = 0;
+        while (j < COLS) // Iterate over each column
         {
-            printf("%c ", mapa[i][j]); // Imprime o caractere da célula seguida de um espaço
-            j++; // Incrementa a coluna
+            ft_putchar(mapa[i][j]); // Print each character
+            j++; // Move to the next column
         }
-        printf("\n"); // Imprime uma nova linha após terminar uma linha do mapa
-        i++; // Incrementa a linha
+        ft_putstr("\n"); // New line after each row
+        i++; // Move to the next row
     }
 }
 ```
-
-## Função principal()
-
-```c
-int main(void)
-{
-char mapa[ROWS][COLS] = {
-    {'o', 'o', 'o', 'o', 'o', 'o', 'o', 'o', 'o', 'o'},
-    {'o', 'o', 'o', 'o', 'o', 'o', 'o', 'o', 'o', 'o'},
-    {'o', 'o', 'o', 'o', 'o', 'o', 'o', 'o', 'o', 'o'},
-    {'o', 'o', 'o', 'o', 'o', 'o', 'o', 'o', 'o', 'o'},
-    {'o', 'o', 'o', 'o', 'o', 'o', 'o', 'o', 'o', 'o'},
-    {'o', 'o', 'o', 'o', 'o', 'o', 'o', 'o', 'o', 'o'},
-    {'o', 'o', 'o', 'o', 'o', 'o', 'o', 'o', 'o', 'o'},
-    {'o', 'o', 'o', 'o', 'o', 'o', 'o', 'o', 'o', 'o'},
-    {'o', 'o', 'o', 'o', 'o', 'o', 'o', 'o', 'o', 'o'},
-    {'o', 'o', 'o', 'o', 'o', 'o', 'o', 'o', 'o', 'o'},
-};
-
-    printf("Mapa original:\n");
-    imprimir_mapa(mapa);
-    procurar_maior_quadrado(mapa);
-    printf("\nMapa atualizado com o maior quadrado marcado:\n");
-    imprimir_mapa(mapa);
-    return (0);
-}
-```
-# 42PiscineBSQ
