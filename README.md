@@ -1,17 +1,6 @@
-/* ************************************************************************** */
-/*                                                                            */
-/*                                                        :::      ::::::::   */
-/*   C Piscine BSQ                                      :+:      :+:    :+:   */
-/*                                                    +:+ +:+         +:+     */
-/*   By: cvalim-d & fpedroso                        +#+  +:+       +#+        */
-/*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/10/08 17:03:05 by cvalim-d          #+#    #+#             */
-/*   Updated: 2024/10/08 17:37:23 by cvalim-d         ###   ########.fr       */
-/*                                                                            */
-/* ************************************************************************** */
-
-
 # Largest Square Finder
+
+![Cover Photo](cover.png)
 
 This program finds and marks the largest square of empty spaces (represented by `.`) in a 2D map, filling it with `X`.
 

@@ -6,12 +6,12 @@
 /*   By: cvalim-d <cvalim-d@student.42lisboa.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/08 17:03:10 by cvalim-d          #+#    #+#             */
-/*   Updated: 2024/10/08 17:03:11 by cvalim-d         ###   ########.fr       */
+/*   Updated: 2024/10/08 19:11:08 by cvalim-d         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include <unistd.h>
 #include "bsq_header.h"
+#include <unistd.h>
 
 void	ft_putchar(char c)
 {
