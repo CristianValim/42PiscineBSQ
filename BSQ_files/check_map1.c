@@ -6,7 +6,7 @@
 /*   By: cvalim-d <cvalim-d@student.42lisboa.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/09 22:19:21 by cvalim-d          #+#    #+#             */
-/*   Updated: 2024/10/09 22:30:56 by cvalim-d         ###   ########.fr       */
+/*   Updated: 2024/10/09 22:32:42 by cvalim-d         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,7 +23,11 @@ static int	open_file_safe(char *file_name)
 	int	fd;
 
 	fd = open(file_name, O_RDONLY);
-	return ((fd == -1) ? -1 : fd);
+	if (fd == -1)
+	{
+		return (-1);
+	}
+	return (fd);
 }
 
 char	*read_file(char *file_name, t_map *map, int *total_bytes)
@@ -79,7 +83,7 @@ int	fill_map_data(char *map_start, t_map *map)
 	int		i;
 
 	i = 0;
-	if (!allocate_map_data(map)) // Call allocate_map_data here
+	if (!allocate_map_data(map))
 		return (0);
 	line = ft_tiktok(map_start, 10);
 	while (i < map->total_lines && line)
@@ -95,7 +99,7 @@ int	fill_map_data(char *map_start, t_map *map)
 		line = ft_tiktok(NULL, 10);
 		i++;
 	}
-	map->data[i] = NULL; // Make sure to NULL terminate the array
+	map->data[i] = NULL;
 	return (1);
 }
 
@@ -103,19 +107,17 @@ int	main(void)
 {
 	int		fd;
 	int		total_bytes;
-	t_map	map; // Remove duplicate declaration
 	char	*buffer;
 
+	t_map map; // Remove duplicate declaration
 	fd = open("map", O_RDONLY);
 	if (fd < 0)
 	{
 		print_map_error();
 		return (1);
 	}
-
 	// Initialize map
 	map = (t_map){0}; // Use aggregate initialization
-
 	buffer = read_file("map", &map, &total_bytes);
 	if (!buffer)
 	{
