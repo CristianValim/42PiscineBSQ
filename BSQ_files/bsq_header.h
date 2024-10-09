@@ -6,12 +6,28 @@
 /*   By: cvalim-d <cvalim-d@student.42lisboa.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/08 17:03:08 by cvalim-d          #+#    #+#             */
-/*   Updated: 2024/10/09 18:58:52 by cvalim-d         ###   ########.fr       */
+/*   Updated: 2024/10/09 21:51:07 by cvalim-d         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef BSQ_HEADER_H
 # define BSQ_HEADER_H
+
+typedef struct s_map_chars
+{
+	char		empty;
+	char		obstacle;
+	char		full;
+}				t_map_chars;
+
+typedef struct s_map
+{
+	char		*header;
+	char		**data;
+	int			total_lines;
+	int			max_lines;
+	t_map_chars	chars;
+}				t_map;
 
 #include <fcntl.h>
 #include <stdlib.h>

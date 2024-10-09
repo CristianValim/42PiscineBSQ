@@ -6,7 +6,7 @@
 /*   By: cvalim-d <cvalim-d@student.42lisboa.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/08 17:03:10 by cvalim-d          #+#    #+#             */
-/*   Updated: 2024/10/09 20:13:47 by cvalim-d         ###   ########.fr       */
+/*   Updated: 2024/10/09 22:12:31 by cvalim-d         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,23 +21,25 @@ char	*ft_tiktok(char *str, char delimiter)
 	{
 		current_position = str; // Atualiza a posição atual
 	}
-	if (!current_position || *current_position == '\0') // Verifica se não há mais string
+	if (!current_position || *current_position == '\0')
+		// Verifica se não há mais string
 	{
 		return (NULL);
 	}
-	start = current_position; // Marca o início da nova substring
-	while (*current_position && *current_position != delimiter) // Avança até o delimitador
+	start = current_position;
+		// Marca o início da nova substring
+	while (*current_position && *current_position != delimiter)
+		// Avança até o delimitador
 	{
 		current_position++;
 	}
 	if (*current_position) // Se encontrou o delimitador
 	{
 		*current_position = '\0'; // Substitui por terminador
-		current_position++; // Move para o próximo caractere
+		current_position++;       // Move para o próximo caractere
 	}
 	return (start); // Retorna a substring
 }
-
 
 void	ft_putchar(char c)
 {
