@@ -1,3 +1,17 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   check_map2.c                                       :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: cvalim-d <cvalim-d@student.42lisboa.com    +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2024/10/09 22:34:07 by cvalim-d          #+#    #+#             */
+/*   Updated: 2024/10/09 22:56:54 by cvalim-d         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
+#include "bsq_header.h"
+
 char	*process_header(char *buffer, t_map *map)
 {
 	char	*newline;
@@ -25,6 +39,7 @@ char	*process_header(char *buffer, t_map *map)
 	}
 	return (NULL);
 }
+
 int	check_header(char *header, t_map *map)
 {
 	char	*line_count_str;
@@ -46,6 +61,7 @@ int	check_header(char *header, t_map *map)
 		&& map->chars.empty != map->chars.full
 		&& map->chars.obstacle != map->chars.full);
 }
+
 int	validate_line_count(char *line_count_str)
 {
 	int	i;
@@ -59,6 +75,7 @@ int	validate_line_count(char *line_count_str)
 	}
 	return (1);
 }
+
 int	check_length(t_map *map)
 {
 	int	first_line_length;
@@ -76,6 +93,7 @@ int	check_length(t_map *map)
 	}
 	return (1);
 }
+
 int	check_lines(char *buffer, t_map *map)
 {
 	char	*map_start;

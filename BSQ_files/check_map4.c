@@ -1,3 +1,17 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   check_map4.c                                       :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: cvalim-d <cvalim-d@student.42lisboa.com    +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2024/10/09 22:37:07 by fpedroso          #+#    #+#             */
+/*   Updated: 2024/10/09 23:21:54 by cvalim-d         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
+#include "bsq_header.h"
+
 int	validate_map_structure(t_map *map)
 {
 	if (map->total_lines != map->max_lines)
@@ -45,8 +59,6 @@ int	check_map(t_map *map)
 		return (0);
 	return (1);
 }
-
-
 
 void	cleanup(t_map *map, char *buffer, int file_descriptor)
 {

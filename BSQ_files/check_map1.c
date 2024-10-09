@@ -6,7 +6,7 @@
 /*   By: cvalim-d <cvalim-d@student.42lisboa.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/09 22:19:21 by cvalim-d          #+#    #+#             */
-/*   Updated: 2024/10/09 22:32:42 by cvalim-d         ###   ########.fr       */
+/*   Updated: 2024/10/09 23:20:13 by cvalim-d         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,7 +18,7 @@
 
 #define BUFFER_SIZE 1
 
-static int	open_file_safe(char *file_name)
+int	open_file_safe(char *file_name)
 {
 	int	fd;
 
@@ -48,7 +48,7 @@ char	*read_file(char *file_name, t_map *map, int *total_bytes)
 	return (buffer);
 }
 
-static char	*read_file_content(int fd, int *total_bytes)
+char	*read_file_content(int fd, int *total_bytes)
 {
 	char	*buffer;
 	int		count;
@@ -101,45 +101,4 @@ int	fill_map_data(char *map_start, t_map *map)
 	}
 	map->data[i] = NULL;
 	return (1);
-}
-
-int	main(void)
-{
-	int		fd;
-	int		total_bytes;
-	char	*buffer;
-
-	t_map map; // Remove duplicate declaration
-	fd = open("map", O_RDONLY);
-	if (fd < 0)
-	{
-		print_map_error();
-		return (1);
-	}
-	// Initialize map
-	map = (t_map){0}; // Use aggregate initialization
-	buffer = read_file("map", &map, &total_bytes);
-	if (!buffer)
-	{
-		print_map_error();
-		cleanup(&map, buffer, fd);
-		return (0);
-	}
-	if (!check_header(map.header, &map))
-	{
-		cleanup(&map, buffer, fd);
-		return (1);
-	}
-	if (!check_map(&map))
-	{
-		cleanup(&map, buffer, fd);
-		return (1);
-	}
-	if (!check_length(&map))
-	{
-		cleanup(&map, buffer, fd);
-		return (1);
-	}
-	cleanup(&map, buffer, fd);
-	return (0);
 }

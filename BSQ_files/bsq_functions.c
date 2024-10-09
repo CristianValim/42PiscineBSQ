@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   bsq_functions.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: cvalim-d <cvalim-d@student.42lisboa.com    +#+  +:+       +#+        */
+/*   By: fpedroso <fpedroso@student.42lisboa.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/08 17:03:10 by cvalim-d          #+#    #+#             */
-/*   Updated: 2024/10/09 22:12:31 by cvalim-d         ###   ########.fr       */
+/*   Updated: 2024/10/09 22:16:57 by fpedroso         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,26 +19,23 @@ char	*ft_tiktok(char *str, char delimiter)
 
 	if (str)
 	{
-		current_position = str; // Atualiza a posição atual
+		current_position = str;
 	}
 	if (!current_position || *current_position == '\0')
-		// Verifica se não há mais string
 	{
 		return (NULL);
 	}
 	start = current_position;
-		// Marca o início da nova substring
 	while (*current_position && *current_position != delimiter)
-		// Avança até o delimitador
 	{
 		current_position++;
 	}
-	if (*current_position) // Se encontrou o delimitador
+	if (*current_position)
 	{
-		*current_position = '\0'; // Substitui por terminador
-		current_position++;       // Move para o próximo caractere
+		*current_position = '\0';
+		current_position++;
 	}
-	return (start); // Retorna a substring
+	return (start);
 }
 
 void	ft_putchar(char c)
@@ -90,42 +87,4 @@ char	*ft_strndup(const char *s, int n)
 	}
 	final[i] = '\0';
 	return (final);
-}
-
-char	*ft_strdup(char *s)
-{
-	int		i;
-	char	*final;
-	int		len;
-
-	len = ft_strlen(s);
-	final = (char *)malloc((len + 1) * sizeof(char));
-	if (final == NULL)
-	{
-		return (NULL);
-	}
-	i = 0;
-	while (s[i])
-	{
-		final[i] = s[i];
-		i++;
-	}
-	final[i] = '\0';
-	return (final);
-}
-
-void	print_map_error(void)
-{
-	write(2, "map error\n", 10);
-}
-int	ft_strlen(char *str)
-{
-	int	i;
-
-	i = 0;
-	while (str[i])
-	{
-		i++;
-	}
-	return (i);
 }

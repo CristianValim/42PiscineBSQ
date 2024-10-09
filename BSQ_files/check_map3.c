@@ -1,3 +1,17 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   check_map3.c                                       :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: cvalim-d <cvalim-d@student.42lisboa.com    +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2024/10/09 22:34:42 by fpedroso          #+#    #+#             */
+/*   Updated: 2024/10/09 23:19:29 by cvalim-d         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
+#include "bsq_header.h"
+
 int	process_map(char *map_start, t_map *map)
 {
 	if (!allocate_map_data(map))
@@ -5,7 +19,7 @@ int	process_map(char *map_start, t_map *map)
 	return (fill_map_data(map_start, map));
 }
 
-static char	*allocate_buffer(int size)
+char	*allocate_buffer(int size)
 {
 	char	*buffer;
 
@@ -15,7 +29,7 @@ static char	*allocate_buffer(int size)
 	return (buffer);
 }
 
-static char	*expand_buffer(char *buffer, int new_size)
+char	*expand_buffer(char *buffer, int new_size)
 {
 	char	*new_buffer;
 	int		i;
